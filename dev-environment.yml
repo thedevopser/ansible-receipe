@@ -34,7 +34,7 @@
 
     - name: Add Node.js APT Repository
       shell:
-        cmd: curl -sL https://deb.nodesource.com/setup_14.x | bash -
+        cmd: curl -sL https://deb.nodesource.com/setup_{{ nodejs_version }} | bash -
         warn: false
 
     - name: Install Node.js
