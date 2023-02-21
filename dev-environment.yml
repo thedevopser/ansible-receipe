@@ -1,0 +1,52 @@
+---
+- name: Install required packages
+  hosts: localhost
+  become: yes
+
+  vars:
+    php_version: "7.2"
+    nodejs_version: "14.x"
+
+  tasks:
+    - name: Add Ondrej Apache PPA
+      apt_repository:
+        repo: "ppa:ondrej/apache2"
+        state: present
+
+    - name: Install Apache 2.4
+      apt:
+        name: apache2
+        state: present
+        update_cache: true
+
+    - name: Add Ondrej PHP PPA
+      apt_repository:
+        repo: "ppa:ondrej/php"
+        state: present
+
+    - name: Update Systeme
+      shell:
+        cmd: apt update
+
+    - name: Install PHP
+      shell:
+        cmd: apt install php{{ php_version }} libapache2-mod-php{{ php_version }} php{{ php_version }}-mbstring php{{ php_version }}-dev php{{ php_version }}-intl php{{ php_version }}-gd php{{ php_version }}-zip php{{ php_version }}-pgsql php{{ php_version }}-sqlite3 php-pear php{{ php_version }}-mysql php{{ php_version }}-ldap -y
+
+    - name: Add Node.js APT Repository
+      shell:
+        cmd: curl -sL https://deb.nodesource.com/setup_14.x | bash -
+        warn: false
+
+    - name: Install Node.js
+      shell:
+        cmd: apt update && apt install nodejs -y
+
+    - name: Install Yarn
+      shell:
+        cmd: npm i -g yarn
+
+    - name: Install Git
+      apt:
+        name: git
+        state: present
+        update_cache: true
